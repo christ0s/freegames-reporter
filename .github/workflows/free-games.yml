@@ -2,8 +2,8 @@ name: Free Games Reporter
 
 on:
   schedule:
-    # Every Monday at 10:00 UTC — adjust to taste.
-    - cron: "0 10 * * 1"
+    # Every 3 days at 10:00 UTC (Mon, Thu, Sun).
+    - cron: "0 10 */3 * *"
   workflow_dispatch: # Allow manual runs from the Actions tab.
 
 permissions:
