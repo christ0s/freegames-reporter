@@ -1,0 +1,2 @@
+requests>=2.31,<3
+matrix-nio>=0.24,<1

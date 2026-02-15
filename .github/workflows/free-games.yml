@@ -1,0 +1,39 @@
+name: Free Games Reporter
+
+on:
+  schedule:
+    # Every Monday at 10:00 UTC — adjust to taste.
+    - cron: "0 10 * * 1"
+  workflow_dispatch: # Allow manual runs from the Actions tab.
+
+permissions:
+  contents: write # Needed to push state.json back to the repo.
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Free Games Reporter
+        env:
+          MATRIX_HOMESERVER: ${{ secrets.MATRIX_HOMESERVER }}
+          MATRIX_USER: ${{ secrets.MATRIX_USER }}
+          MATRIX_ACCESS_TOKEN: ${{ secrets.MATRIX_ACCESS_TOKEN }}
+          MATRIX_ROOM_ID: ${{ secrets.MATRIX_ROOM_ID }}
+          ALLOWED_PLATFORMS: ${{ vars.ALLOWED_PLATFORMS }}
+        run: python free_games_bot.py
+
+      - name: Commit updated state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet && echo "No state changes to commit." || git commit -m "chore: update sent-games state [skip ci]" && git push
