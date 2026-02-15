@@ -18,7 +18,7 @@ import pathlib
 import sys
 
 import requests
-from nio import AsyncClient, RoomSendResponse
+from nio import AsyncClient, JoinResponse, RoomSendResponse
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -158,6 +158,13 @@ async def send_to_matrix(giveaways: list[dict]) -> list[int]:
     successfully_sent: list[int] = []
 
     try:
+        # Ensure the bot has joined the room (idempotent — no-ops if already joined).
+        join_resp = await client.join(MATRIX_ROOM_ID)
+        if not isinstance(join_resp, JoinResponse):
+            log.error("Failed to join room %s: %s", MATRIX_ROOM_ID, join_resp)
+            return successfully_sent
+
+
         for gw in giveaways:
             plain, html = _build_message(gw)
             content = {
