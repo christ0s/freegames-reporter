@@ -18,7 +18,7 @@ import pathlib
 import sys
 
 import requests
-from nio import AsyncClient, JoinResponse, RoomSendResponse
+from nio import AsyncClient, JoinResponse, RoomResolveAliasResponse, RoomSendResponse
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -164,6 +164,11 @@ async def send_to_matrix(giveaways: list[dict]) -> list[int]:
             log.error("Failed to join room %s: %s", MATRIX_ROOM_ID, join_resp)
             return successfully_sent
 
+        # room_send requires the internal room ID (!...), not an alias (#...).
+        # Resolve it from the join response or via the alias API.
+        room_id = join_resp.room_id
+        if MATRIX_ROOM_ID.startswith("#"):
+            log.info("Resolved alias %s → %s", MATRIX_ROOM_ID, room_id)
 
         for gw in giveaways:
             plain, html = _build_message(gw)
@@ -174,7 +179,7 @@ async def send_to_matrix(giveaways: list[dict]) -> list[int]:
                 "formatted_body": html,
             }
             resp = await client.room_send(
-                room_id=MATRIX_ROOM_ID,
+                room_id=room_id,
                 message_type="m.room.message",
                 content=content,
             )

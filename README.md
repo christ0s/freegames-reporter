@@ -46,9 +46,9 @@ Go to **Settings → Secrets and variables → Actions** in your GitHub reposito
 | `MATRIX_HOMESERVER` | `https://pcriot.org` | Your Matrix server URL |
 | `MATRIX_USER` | `@freegamesbot:pcriot.org` | Bot's full Matrix user ID |
 | `MATRIX_ACCESS_TOKEN` | `syt_...` | Access token from step 1 |
-| `MATRIX_ROOM_ID` | `!abcdefg:pcriot.org` | Internal room ID (not the alias) |
+| `MATRIX_ROOM_ID` | `#myroom:pcriot.org` | Room alias or internal ID (`!abc:pcriot.org`) |
 
-> **Tip:** To find the room ID in Element, go to Room Settings → Advanced → Internal room ID.
+> **Tip:** The room alias (e.g. `#myroom:pcriot.org`) is the easiest to use. You can find it in Element under Room Settings → General. The internal ID (`!...`) from Room Settings → Advanced also works.
 
 #### Variables (non-sensitive values)
 
