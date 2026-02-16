@@ -84,6 +84,93 @@ python free_games_bot.py
 
 State is saved to `state.json` in the working directory.
 
+## Docker Installation
+
+### Prerequisites
+
+- Docker installed on your machine.
+- Access to a terminal or command prompt.
+
+### Steps to Run with Docker
+
+1. **Clone the repository and create an `.env` file:**
+
+   Rename the .env.example to .env and set your variables
+
+
+2. **Build the Docker Image:**
+
+   ```bash
+   docker build -t free-games-bot .
+   ```
+
+3. **Run the Docker Container:**
+
+   ```bash
+   docker run --env-file .env -d free-games-bot
+   ```
+
+   Alternatively, you can set environment variables directly:
+
+   ```bash
+   docker run -e MATRIX_HOMESERVER="https://yourMatrixHomeServer.org" \
+              -e MATRIX_USER="@freegamesbot:yourMatrixHomeServer.org" \
+              -e MATRIX_ACCESS_TOKEN="syt_..." \
+              -e MATRIX_ROOM_ID="#myroom:matrix.org" \
+              -e ALLOWED_PLATFORMS="Epic Games Store,Steam,GOG" \
+              -d free-games-bot
+   ```
+
+4. **Verify the Bot is Running:**
+
+   Ensure that the Docker container is running with:
+
+   ```bash
+   docker ps
+   ```
+
+5. **Inspect Logs (Optional):**
+
+   If you encounter any issues, check the logs to troubleshoot:
+
+   ```bash
+   docker logs -f <container_id>
+   ```
+
+### Steps to Run with Docker Compose
+
+1. **Clone the repository and create an `.env` file:**
+
+   Rename the ".env.example" to ".env" and set your variables
+
+
+2. **Build and Run the Docker Compose Stack:**
+
+   ```bash
+   docker-compose up --build -d
+   ```
+
+3. **Verify the Bot is Running:**
+
+   Ensure that the Docker container is running with:
+
+   ```bash
+   docker ps
+   ```
+
+4. **Inspect Logs (Optional):**
+
+   If you encounter any issues, check the logs to troubleshoot:
+
+   ```bash
+   docker-compose logs -f
+   ```
+
+### Notes
+
+- Docker installation uses a volume (`./state.json:/app/state.json`) to persist the `state.json` file across container restarts.
+- Docker is configured to check for free PC games every day. If you need to change the frequency you can edit the entrypoint.sh and set sleep to your liking. (in seconds)
+
 ## Project structure
 
 ```

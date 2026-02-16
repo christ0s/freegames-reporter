@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  free_games_bot:
+    build: .
+    env_file:
+      - .env
+    command: ["./entrypoint.sh"]
