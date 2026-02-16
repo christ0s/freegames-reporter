@@ -23,7 +23,7 @@ A Matrix bot that automatically finds free PC game giveaways and posts them to y
 
 ### 1. Create a Matrix bot account
 
-Register a dedicated account on your Matrix homeserver (e.g. `@freegamesbot:pcriot.org`) and join it to the target room.
+Register a dedicated account on your Matrix homeserver (e.g. `@freegamesbot:matrix.org`) and join it to the target room.
 
 Obtain an access token — the easiest way is via `curl`:
 
@@ -43,12 +43,12 @@ Go to **Settings → Secrets and variables → Actions** in your GitHub reposito
 
 | Name | Example | Description |
 |---|---|---|
-| `MATRIX_HOMESERVER` | `https://pcriot.org` | Your Matrix server URL |
-| `MATRIX_USER` | `@freegamesbot:pcriot.org` | Bot's full Matrix user ID |
+| `MATRIX_HOMESERVER` | `https://matrix.org` | Your Matrix server URL |
+| `MATRIX_USER` | `@freegamesbot:matrix.org` | Bot's full Matrix user ID |
 | `MATRIX_ACCESS_TOKEN` | `syt_...` | Access token from step 1 |
-| `MATRIX_ROOM_ID` | `#myroom:pcriot.org` | Room alias or internal ID (`!abc:pcriot.org`) |
+| `MATRIX_ROOM_ID` | `#myroom:matrix.org` | Room alias or internal ID (`!abc:matrix.org`) |
 
-> **Tip:** The room alias (e.g. `#myroom:pcriot.org`) is the easiest to use. You can find it in Element under Room Settings → General. The internal ID (`!...`) from Room Settings → Advanced also works.
+> **Tip:** The room alias (e.g. `#myroom:matrix.org`) is the easiest to use. You can find it in Element under Room Settings → General. The internal ID (`!...`) from Room Settings → Advanced also works.
 
 #### Variables (non-sensitive values)
 
@@ -73,10 +73,10 @@ You can also trigger it manually from the **Actions** tab → **Free Games Repor
 ```bash
 pip install -r requirements.txt
 
-export MATRIX_HOMESERVER="https://pcriot.org"
-export MATRIX_USER="@freegamesbot:pcriot.org"
+export MATRIX_HOMESERVER="https://yourMatrixHomeServer.org"
+export MATRIX_USER="@freegamesbot:yourMatrixHomeServer.org
 export MATRIX_ACCESS_TOKEN="syt_..."
-export MATRIX_ROOM_ID="!abcdefg:pcriot.org"
+export MATRIX_ROOM_ID="!abcdefg:yourMatrixHomeServer. Org"
 export ALLOWED_PLATFORMS="Epic Games Store,Steam,GOG"
 
 python free_games_bot.py
