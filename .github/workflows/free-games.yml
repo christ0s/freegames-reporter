@@ -6,9 +6,6 @@ on:
     - cron: "0 10 */3 * *"
   workflow_dispatch: # Allow manual runs from the Actions tab.
 
-permissions:
-  actions: read # Needed to download artifacts from previous runs.
-
 concurrency:
   group: free-games-reporter
   cancel-in-progress: false # Queue runs instead of cancelling, so none are lost.
@@ -26,15 +23,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Download state.json from the most recent previous run (if any).
+      # Download state.json from the most recent successful run (if any).
       - name: Download previous state
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          name: sent-games-state
-          path: .
-          if_no_artifact_found: warn
-          workflow: ${{ github.workflow }}
-          branch: fix/artifact-way
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LATEST_RUN=$(gh run list \
+            --workflow "Free Games Reporter" \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
+
+          if [ -z "$LATEST_RUN" ] || [ "$LATEST_RUN" = "null" ]; then
+            echo "No previous successful run found — first run."
+            exit 0
+          fi
+
+          echo "Downloading artifact from run $LATEST_RUN..."
+          gh run download "$LATEST_RUN" --name sent-games-state --dir . || echo "No artifact in that run — starting fresh."
 
       - name: Run Free Games Reporter
         env:
