@@ -6,6 +6,9 @@ on:
     - cron: "0 10 */3 * *"
   workflow_dispatch: # Allow manual runs from the Actions tab.
 
+permissions:
+  actions: read # Needed to download artifacts from previous runs.
+
 concurrency:
   group: free-games-reporter
   cancel-in-progress: false # Queue runs instead of cancelling, so none are lost.
