@@ -95,7 +95,7 @@ State is saved to `state.json` in the working directory.
 
 1. **Clone the repository and create an `.env` file:**
 
-   Rename the .env.example to .env and set your variables
+   Copy the .env.example to .env and set your variables
 
 
 2. **Build the Docker Image:**
@@ -107,18 +107,12 @@ State is saved to `state.json` in the working directory.
 3. **Run the Docker Container:**
 
    ```bash
-   docker run --env-file .env -d free-games-bot
-   ```
-
-   Alternatively, you can set environment variables directly:
-
-   ```bash
-   docker run -e MATRIX_HOMESERVER="https://yourMatrixHomeServer.org" \
-              -e MATRIX_USER="@freegamesbot:yourMatrixHomeServer.org" \
-              -e MATRIX_ACCESS_TOKEN="syt_..." \
-              -e MATRIX_ROOM_ID="#myroom:matrix.org" \
-              -e ALLOWED_PLATFORMS="Epic Games Store,Steam,GOG" \
-              -d free-games-bot
+   docker run \
+   --name free_games_bot_docker \
+      --env-file .env \
+      -v ./storage:/app/storage \
+      -d \
+      free-games-bot
    ```
 
 4. **Verify the Bot is Running:**
@@ -168,17 +162,24 @@ State is saved to `state.json` in the working directory.
 
 ### Notes
 
-- Docker installation uses a volume (`./state.json:/app/state.json`) to persist the `state.json` file across container restarts.
+- Docker installation uses a volume (./storage:/app/storage) to persist the state.json file across container restarts. The STATE_FILE environment variable is set to /app/storage/state.json to ensure the file is stored in the correct location inside the container.
 - Docker is configured to check for free PC games every day. If you need to change the frequency you can edit the entrypoint.sh and set sleep to your liking. (in seconds)
 
 ## Project structure
 
 ```
-├── .github/workflows/free-games.yml   # GitHub Actions workflow
-├── free_games_bot.py                  # Main bot script
-├── requirements.txt                   # Python dependencies
-├── state.json                         # Auto-generated sent-game IDs (do not edit)
-└── README.md
+.
+├── .env.example                    # Example environment variables file (for Docker)
+├── .github/                        # GitHub Actions and other GitHub-related files
+│   └── workflows/                  # GitHub Actions workflows
+│       └── free-games.yml          # Workflow file for running the bot every 3 days
+├── Dockerfile                      # Docker configuration file
+├── README.md                       # This file — instructions and documentation
+├── free_games_bot.py               # Main Python script for the bot
+├── entrypoint.sh                   # Script to run the bot inside the Docker container
+├── requirements.txt                # Python dependencies for the bot
+├── state.json                      # Auto-generated file storing sent-game IDs
+└── docker-compose.yml              # Docker Compose configuration (optional, for easier Docker setup)
 ```
 
 ## License

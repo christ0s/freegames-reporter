@@ -1,8 +1,11 @@
-version: '3.8'
-
 services:
   free_games_bot:
     build: .
+    container_name: free_games_bot
+    logging:
+      driver: json-file
     env_file:
       - .env
     command: ["./entrypoint.sh"]
+    volumes:
+      - ./storage:/app/storage
