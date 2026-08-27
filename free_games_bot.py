@@ -78,9 +78,13 @@ def save_sent_ids(ids: set[int]) -> None:
 
 def fetch_giveaways() -> list[dict]:
     """Fetch the current PC game giveaways from GamerPower."""
-    resp = requests.get(GAMERPOWER_API, timeout=HTTP_TIMEOUT)
-    resp.raise_for_status()
-    data = resp.json()
+    try:
+        resp = requests.get(GAMERPOWER_API, timeout=HTTP_TIMEOUT)
+        resp.raise_for_status()
+        data = resp.json()
+    except (requests.RequestException, ValueError) as exc:
+        log.warning("Failed to fetch giveaways from GamerPower: %s", exc)
+        return []
 
     # The API returns a JSON array on success, or a status-message object
     # when there are zero results.
